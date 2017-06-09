@@ -1,1 +1,9 @@
 /runtime
+.DS_Store
+/tests
+.buildpath
+.settings
+.gitignore.swp
+.project
+/.settings
+/tests
