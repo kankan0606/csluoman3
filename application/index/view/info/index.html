@@ -1,0 +1,64 @@
+{include file="public/header" /}
+{js href="__JS__/leftmenu.js,__JS__/picplay.js" /}
+{css  href="__CSS__/leftmenu.css"  /}
+<div class="n_wz">
+    <div class="n_wz_tit">
+          <span class="font5">最新资讯</span><span class="font6"> NEW </span>
+    </div>
+    <div class="n_wz_n1">您现在所在位置：<a href="/" class="black12">首页</a> &gt; 最新资讯</div>
+</div>
+   
+    <div class="n_ct">
+      {include file="public/left" /}
+      <div class="n_ct_right">
+        <div class="n_ct_right_tit"><span class="font14">最新资讯</span> <span class="font7">/</span> <span class="font6">NEW</span></div>
+       
+         <div class="n_ct_right_new">
+            <div class="n_ct_right_new_s"> 
+               <div class="n_ct_right_new_s_caption"><img src="__IMAGES__/xwdt.png" /></div>
+               <div class="n_ct_right_new_s_content">
+              <ul>
+                   {volist name="dongtai_list" id="vo" empty="ERROR_NODATA"}
+                  <li>
+                           <img src="__IMAGES__/ioc-01.png" /><a href="/new/content/type/{$vo.c_type}/menuid/{$menuid}/c_id/{$vo.c_id}/"><span>{$vo.c_name}</span></a>
+                        </li>   
+                      {/volist}            
+                    </ul>
+                    <div id="more" class="more right"><a href="/new/captions/type/1/menuid/{$menuid}/">更多<img src="__IMAGES__/more_1.png" /></a></div>
+               </div>
+               
+            </div>
+            <div class="n_ct_right_new_s">               
+                 <div class="n_ct_right_new_s_content">
+                 
+                 <ul>
+                   {volist name="wenti_list" id="vo" empty="ERROR_NODATA"}
+                   <li>
+                           <img src="__IMAGES__/ioc-01.png" /><a href="/new/content/type/{$vo.c_type}/menuid/{$menuid}/c_id/{$vo.c_id}/"><span>{$vo.c_name}</span></a>
+                        </li>   
+                      {/volist}          
+                    </ul>
+                    <div class="more left"><a href="/new/captions/type/2/menuid/{$menuid}/"><img src="__IMAGES__/more_2.png" />更多</a></div>
+                 </div>
+                 <div class="n_ct_right_new_s_caption"><img src="__IMAGES__/cjwt.png" /></div>
+            </div>
+            <div class="n_ct_right_new_s">
+                 <div class="n_ct_right_new_s_caption"><img src="__IMAGES__/hlcb.png" /></div>
+               <div class="n_ct_right_new_s_content">
+                <ul>
+                   {volist name="choubei_list" id="vo" empty="ERROR_NODATA"}
+                   <li>
+                            <img src="__IMAGES__/ioc-01.png" /><a href="/new/content/type/{$vo.c_type}/menuid/{$menuid}/c_id/{$vo.c_id}/"><span>{$vo.c_name}</span></a>
+                        </li>   
+                      {/volist}            
+                    </ul>
+               <div class="more right"><a href="/new/captions/type/3/menuid/{$menuid}/">更多<img src="__IMAGES__/more_3.png" /></a></div>
+               </div>
+            </div>
+        </div>
+         
+      </div>
+    </div>
+
+
+{include file="public/footer" /}

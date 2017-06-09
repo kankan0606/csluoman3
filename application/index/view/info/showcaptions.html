@@ -1,0 +1,34 @@
+{include file="public/header" /}
+{js href="__JS__/leftmenu.js,__JS__/picplay.js" /}
+{css  href="__CSS__/leftmenu.css"  /}
+<div class="n_wz">
+
+  <div class="n_wz_tit">
+          <span class="font5">最新资讯</span><span class="font6"> NEW </span>
+    </div>
+    <div class="n_wz_n1">您现在所在位置：{$location}</div>
+</div>
+   
+    <div class="n_ct">
+      {include file="public/left" /}
+      <div class="n_ct_right">
+        <div class="n_ct_right_tit"><span class="font14">{$location_tit}</span> <span class="font7">/</span> <span class="font6">{$location_en}</span></div>
+       
+         <div class="n_ct_right_new">
+            <div class="n_ct_right_new_s">
+               <ul>
+                    {volist name="plist" id="vo" empty="暂时没有数据"}
+                        <li><div class="c_name"><a href="/new/content/type/{$c_type}/menuid/{$menuid}/c_id/{$vo.c_id}/" title="{$vo.c_name}"><img src="__IMAGES__/ioc-01.png" />{$vo.c_name}</a></div><div class="c_date">{$vo.c_date}</div>
+                       </li>
+                    </volist>
+                   
+               </ul>
+                
+            </div>
+            
+            
+        </div>
+         <div class="repage" >{$page}</</div>
+      </div>
+    </div>
+{include file="public/footer" /} 

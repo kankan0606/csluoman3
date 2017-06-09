@@ -1,0 +1,18 @@
+this is TEST page!!<br/>
+{volist	name="newlist"	id="vo"} 
+    {$vo.c_name}|<br/>
+{/volist}<br/>
+{volist	name="whlist"	id="vo"} 
+    {$vo.c_name}|<br/>
+{/volist}
+<br/>
+主菜单列表：<br/>
+{volist	name="navigation"	id="vo"} 
+    {$vo.name}|{$vo.menu_id}|{$vo.path}<br/>
+{/volist}
+<br/>
+侧菜单列表：<br/>
+{volist	name="list"	id="vo"} 
+    {$vo.cate_Name}|{$vo.cate_Id}|{$vo.cate_path}<br/>
+{/volist}
+<br/>

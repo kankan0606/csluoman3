@@ -1,0 +1,40 @@
+<include file="Public:header" />
+<js href="__JS__/leftmenu.js,__JS__/picplay.js" />
+<css  href="__CSS__/leftmenu.css,__CSS__/showpic.css"  />
+<div class="n_wz">
+
+
+
+    <div class="n_wz_tit">
+          <span class="font5">最新资讯</span><span class="font6"> NEW </span>
+    </div>
+    <div class="n_wz_n1">您现在所在位置：{$location}</div>
+</div>
+   
+    <div class="n_ct">
+      <include file="Public:left" />
+      <div class="n_ct_right">
+        <div class="n_ct_right_tit"><div class="caption">标题：{$c_name}</div><div class="num">浏览次数：{$c_num}</div><div class="date">更新日期：{$c_date}</div></div>
+       
+         <div class="n_ct_right_new">
+            <div class="n_ct_right_new_s">
+                <volist name="c_list" id="vo" empty="暂时没有数据">
+                        {$vo.content}
+                      
+                    </volist>
+                
+            </div>
+            
+           <div class="c_return"> {$pre_str}</div>
+           <div class="c_return"> {$nex_str}</div>
+        </div>
+        <div style="float:left; width:728">
+         <!--cnzz tui-->
+	<script  type="text/javascript" c=gd  charset="utf-8"  src="http://tui.cnzz.net/cs.php?id=1000072114"></script>
+<!--cnzz tui-->
+         </div>
+      </div>
+    </div>
+
+
+<include file="Public:footer" />  

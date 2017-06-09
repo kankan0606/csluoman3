@@ -1,0 +1,31 @@
+{include file="public/header" /}
+{js href="__JS__/leftmenu.js,__JS__/picplay.js" /}
+{css  href="__CSS__/leftmenu.css" /}
+<div class="n_wz">
+    <div class="n_wz_tit">
+          <span class="font5">套系报价</span><span class="font6"> PRICE</span>
+    </div>
+    <div class="n_wz_n1">您现在所在位置：<a href="/" class="black12">首页</a> &gt; {$location_tit}</div>
+</div>
+   
+    <div class="n_ct">
+      {include file="public/left" /}
+      <div class="n_ct_right">
+        <div class="n_ct_right_tit"><span class="font14">{$location_tit}</span> <span class="font7">/</span> <span class="font6">{$location_en}</span></div>
+       
+         <div class="n_ct_right_n">
+           {volist name="plist" id="vo" empty="暂时没有数据"}
+                      <div class=n_ct_right_k3>  <div class=n_ct_right_k3_n1><a href='/Price/showcon/p_id/{$vo.price_id}/menuid/{$menuid}'><img src='__UPLOAD__/{$vo.price_view}' width=220 height=193 border=0 /></a></div><div class=n_ct_right_k3_n2>    <div class=n_ct_right_k3_n3>      <div class=n_ct_right_k3_n3_bt>{$vo.price_name}</div>      <div class=n_ct_right_k3_n3_img><a href='/price/showcon/p_id/{$vo.price_id}/menuid/{$menuid}'><img src='__IMAGES__/n_an2.jpg' width=45 height=14 /></a></div>    </div>    <div class=n_ct_right_k3_n3><span class=font2>服务报价</span><br />       <div class="n_ct_right_k3_n3_pr"> <span class=font9>现价：</span><span class=font10>{$vo.price_p}</span></div></div>    <div class=n_ct_right_k3_n5>{$vo.price_des}</div>  </div></div>
+                    {/volist}
+                    
+                   
+                          
+                 
+                    </div>
+                       <div class="repage" >{$page}</div>
+         
+      </div>
+    </div>
+
+
+{include file="public/footer" /}  
