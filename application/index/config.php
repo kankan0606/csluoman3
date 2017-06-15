@@ -19,8 +19,8 @@ return [
     //分页配置
     'paginate'               => [
     'var_page'  => 'p',
-    'list_rows' => 2,
-    'step'      => '3',//设置分页导航条显示页码的数量
+    'list_rows' => 9,
+    'step'      => '5',//设置分页导航条显示页码的数量
     'type'      => '\zkk\paginate\HomePage',
     ],
     
