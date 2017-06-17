@@ -88,20 +88,18 @@ class Request
      * @var array 资源类型
      */
     protected $mimeType = [
-        'xml'  => 'application/xml,text/xml,application/x-xml',
-        'json' => 'application/json,text/x-json,application/jsonrequest,text/json',
-        'js'   => 'text/javascript,application/javascript,application/x-javascript',
-        'css'  => 'text/css',
-        'rss'  => 'application/rss+xml',
-        'yaml' => 'application/x-yaml,text/yaml',
-        'atom' => 'application/atom+xml',
-        'pdf'  => 'application/pdf',
-        'text' => 'text/plain',
-        'png'  => 'image/png',
-        'jpg'  => 'image/jpg,image/jpeg,image/pjpeg',
-        'gif'  => 'image/gif',
-        'csv'  => 'text/csv',
-        'html' => 'text/html,application/xhtml+xml,*/*',
+        'xml'   => 'application/xml,text/xml,application/x-xml',
+        'json'  => 'application/json,text/x-json,application/jsonrequest,text/json',
+        'js'    => 'text/javascript,application/javascript,application/x-javascript',
+        'css'   => 'text/css',
+        'rss'   => 'application/rss+xml',
+        'yaml'  => 'application/x-yaml,text/yaml',
+        'atom'  => 'application/atom+xml',
+        'pdf'   => 'application/pdf',
+        'text'  => 'text/plain',
+        'image' => 'image/png,image/jpg,image/jpeg,image/pjpeg,image/gif,image/webp,image/*',
+        'csv'   => 'text/csv',
+        'html'  => 'text/html,application/xhtml+xml,*/*',
     ];
 
     protected $content;
@@ -120,7 +118,7 @@ class Request
     protected $isCheckCache;
 
     /**
-     * 架构函数
+     * 构造函数
      * @access protected
      * @param array $options 参数
      */
@@ -134,6 +132,7 @@ class Request
         if (is_null($this->filter)) {
             $this->filter = Config::get('default_filter');
         }
+
         // 保存 php://input
         $this->input = file_get_contents('php://input');
     }
@@ -633,7 +632,7 @@ class Request
         if (true === $name) {
             // 获取包含文件上传信息的数组
             $file = $this->file();
-            $data = array_merge($this->param, $file);
+            $data = is_array($file) ? array_merge($this->param, $file) : $this->param;
             return $this->input($data, '', $default, $filter);
         }
         return $this->input($this->param, $name, $default, $filter);
@@ -688,7 +687,7 @@ class Request
     {
         if (empty($this->post)) {
             $content = $this->input;
-            if (empty($_POST) && 'application/json' == $this->contentType()) {
+            if (empty($_POST) && false !== strpos($this->contentType(), 'application/json')) {
                 $this->post = (array) json_decode($content, true);
             } else {
                 $this->post = $_POST;
@@ -713,7 +712,7 @@ class Request
     {
         if (is_null($this->put)) {
             $content = $this->input;
-            if ('application/json' == $this->contentType()) {
+            if (false !== strpos($this->contentType(), 'application/json')) {
                 $this->put = (array) json_decode($content, true);
             } else {
                 parse_str($content, $this->put);
@@ -802,12 +801,26 @@ class Request
     public function cookie($name = '', $default = null, $filter = '')
     {
         if (empty($this->cookie)) {
-            $this->cookie = $_COOKIE;
+            $this->cookie = Cookie::get();
         }
         if (is_array($name)) {
             return $this->cookie = array_merge($this->cookie, $name);
+        } elseif (!empty($name)) {
+            $data = Cookie::has($name) ? Cookie::get($name) : $default;
+        } else {
+            $data = $this->cookie;
         }
-        return $this->input($this->cookie, $name, $default, $filter);
+
+        // 解析过滤器
+        $filter = $this->getFilter($filter, $default);
+
+        if (is_array($data)) {
+            array_walk_recursive($data, [$this, 'filterValue'], $filter);
+            reset($data);
+        } else {
+            $this->filterValue($data, $name, $filter);
+        }
+        return $data;
     }
 
     /**
@@ -957,7 +970,6 @@ class Request
      */
     public function input($data = [], $name = '', $default = null, $filter = '')
     {
-    	
         if (false === $name) {
             // 获取原始数据
             return $data;
@@ -985,18 +997,8 @@ class Request
         }
 
         // 解析过滤器
-        if (is_null($filter)) {
-            $filter = [];
-        } else {
-            $filter = $filter ?: $this->filter;
-            if (is_string($filter)) {
-                $filter = explode(',', $filter);
-            } else {
-                $filter = (array) $filter;
-            }
-        }
+        $filter = $this->getFilter($filter, $default);
 
-        $filter[] = $default;
         if (is_array($data)) {
             array_walk_recursive($data, [$this, 'filterValue'], $filter);
             reset($data);
@@ -1005,11 +1007,9 @@ class Request
         }
 
         if (isset($type) && $data !== $default) {
-        	
             // 强制类型转换
             $this->typeCast($data, $type);
         }
-        
         return $data;
     }
 
@@ -1027,6 +1027,23 @@ class Request
         }
     }
 
+    protected function getFilter($filter, $default)
+    {
+        if (is_null($filter)) {
+            $filter = [];
+        } else {
+            $filter = $filter ?: $this->filter;
+            if (is_string($filter) && false === strpos($filter, '/')) {
+                $filter = explode(',', $filter);
+            } else {
+                $filter = (array) $filter;
+            }
+        }
+
+        $filter[] = $default;
+        return $filter;
+    }
+
     /**
      * 递归过滤给定的值
      * @param mixed     $value 键值
@@ -1042,7 +1059,7 @@ class Request
                 // 调用函数或者方法过滤
                 $value = call_user_func($filter, $value);
             } elseif (is_scalar($value)) {
-                if (strpos($filter, '/')) {
+                if (false !== strpos($filter, '/')) {
                     // 正则过滤
                     if (!preg_match($filter, $value)) {
                         // 匹配不成功返回默认值
@@ -1085,7 +1102,7 @@ class Request
      */
     private function typeCast(&$data, $type)
     {
-    	   switch (strtolower($type)) {
+        switch (strtolower($type)) {
             // 数组
             case 'a':
                 $data = (array) $data;
@@ -1360,7 +1377,11 @@ class Request
     {
         $contentType = $this->server('CONTENT_TYPE');
         if ($contentType) {
-            list($type) = explode(';', $contentType);
+            if (strpos($contentType, ';')) {
+                list($type) = explode(';', $contentType);
+            } else {
+                $type = $contentType;
+            }
             return trim($type);
         }
         return '';
@@ -1505,9 +1526,10 @@ class Request
      * @access public
      * @param string $key 缓存标识，支持变量规则 ，例如 item/:name/:id
      * @param mixed  $expire 缓存有效期
+     * @param array  $except 缓存排除
      * @return void
      */
-    public function cache($key, $expire = null)
+    public function cache($key, $expire = null, $except = [])
     {
         if (false !== $key && $this->isGet() && !$this->isCheckCache) {
             // 标记请求缓存检查
@@ -1519,6 +1541,11 @@ class Request
             if ($key instanceof \Closure) {
                 $key = call_user_func_array($key, [$this]);
             } elseif (true === $key) {
+                foreach ($except as $rule) {
+                    if (0 === strpos($this->url(), $rule)) {
+                        return;
+                    }
+                }
                 // 自动缓存功能
                 $key = '__URL__';
             } elseif (strpos($key, '|')) {
@@ -1526,7 +1553,7 @@ class Request
             }
             // 特殊规则替换
             if (false !== strpos($key, '__')) {
-                $key = str_replace(['__MODULE__', '__CONTROLLER__', '__ACTION__', '__URL__'], [$this->module, $this->controller, $this->action, md5($this->url())], $key);
+                $key = str_replace(['__MODULE__', '__CONTROLLER__', '__ACTION__', '__URL__', ''], [$this->module, $this->controller, $this->action, md5($this->url(true))], $key);
             }
 
             if (false !== strpos($key, ':')) {

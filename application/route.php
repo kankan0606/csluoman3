@@ -30,17 +30,4 @@ return [
         ':name' => ['index/hello', ['method' => 'post']],
     ],
    
-    'case/'       => 'index/Anli/index',
-    'about/planner'       => 'index/about/planner',
-    'about/index'       => 'index/about/index',
-    'about/link'       => 'index/about/link',
-    'about/honor'       => 'index/about/honor',
-    'about/zhaopin'       => 'index/about/zhaopin',
-    'about/group'       => 'index/about/group',
-    'server/index'       => 'index/server/index',
-    'price/index'       => 'index/price/index',
-    'price/showcon'       => 'index/price/showcon',
-    'new/index'       => 'index/info/index',
-    'new/captions'       => 'index/info/showcaptions',
-    'new/content'       => 'index/info/showcontent',
 ];

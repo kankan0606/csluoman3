@@ -18,9 +18,12 @@
             <div class="n_ct_right_new_s">
                <ul>
                     {volist name="plist" id="vo" empty="暂时没有数据"}
-                        <li><div class="c_name"><a href="/new/content/type/{$c_type}/menuid/{$menuid}/c_id/{$vo.c_id}/" title="{$vo.c_name}"><img src="__IMAGES__/ioc-01.png" />{$vo.c_name}</a></div><div class="c_date">{$vo.c_date}</div>
+                        <li><div class="c_name">
+                              <a href="/new/content/type/{$c_type}/menuid/{$menuid}/c_id/{$vo.c_id}/" title="{$vo.c_name}">
+                                  <img src="__IMAGES__/ioc-01.png" />{$vo.c_name}
+                              </a></div><div class="c_date">{$vo.c_date}</div>
                        </li>
-                    </volist>
+                    {/volist}
                    
                </ul>
                 

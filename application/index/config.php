@@ -15,11 +15,12 @@ return [
     
     // 默认AJAX 数据返回格式,可选json xml ...
     'default_ajax_return'    => 'html',
-    
+    'exception_tmpl'         => APP_PATH . 'index'.DS.'tpl' . DS . 'think_exception.tpl',
+           
     //分页配置
     'paginate'               => [
     'var_page'  => 'p',
-    'list_rows' => 9,
+    'list_rows' => 12,
     'step'      => '5',//设置分页导航条显示页码的数量
     'type'      => '\zkk\paginate\HomePage',
     ],

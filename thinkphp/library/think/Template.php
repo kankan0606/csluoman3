@@ -57,7 +57,7 @@ class Template
     protected $storage;
 
     /**
-     * 架构函数
+     * 构造函数
      * @access public
      */
     public function __construct(array $config = [])
@@ -200,8 +200,6 @@ class Template
                 // 缓存页面输出
                 Cache::set($this->config['cache_id'], $content, $this->config['cache_time']);
             }
-            
-            //\think\Log::write('$content=============='.$content);
             echo $content;
         }
     }
@@ -929,7 +927,7 @@ class Template
                         if (false === strpos($name, '(')) {
                             $name = '(isset(' . $name . ') && (' . $name . ' !== \'\')?' . $name . ':' . $args[1] . ')';
                         } else {
-                            $name = '(' . $name . ' !== \'\'?' . $name . ':' . $args[1] . ')';
+                            $name = '(' . $name . ' ?: ' . $args[1] . ')';
                         }
                         break;
                     default: // 通用模板函数

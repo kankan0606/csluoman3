@@ -246,4 +246,40 @@ function addKeyForContent($result,$field){
 
 }
 
+/**
+ * 添加字符串
+ * @param unknown_type $str  需要添加字符串的字符串
+ * @param unknown_type $replaceStr  添加字符串的内容
+ * @param unknown_type $tag  标识
+ * @return string|unknown
+ */
+function insert_str($str,$replaceStr,$tag){
+
+    $i= strpos($str,$tag,0);
+
+    if($i>-1){  //找到指定标签
+        	
+        $prestr=trim(substr($str, 0,$i));
+        	
+        $rest = substr($prestr, -2);
+        	
+        if($rest!='/>'){
+            $prestr=$prestr.'  <'.$replaceStr.'>';
+        }
+        	
+        $nexstr=substr($str,$i+strlen($tag));
+        	
+        $nexstr=insert_str($nexstr,$replaceStr,$tag);
+        	
+        return $prestr.$tag.$nexstr;
+        	
+    }else{
+        	
+        return $str;
+    }
+
+}
+
+
+
 ?>

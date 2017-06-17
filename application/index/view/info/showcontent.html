@@ -1,6 +1,8 @@
-<include file="Public:header" />
-<js href="__JS__/leftmenu.js,__JS__/picplay.js" />
-<css  href="__CSS__/leftmenu.css,__CSS__/showpic.css"  />
+{include file="public/header"/}
+{js href="__JS__/leftmenu.js,__JS__/picplay.js" /}
+{css  href="__CSS__/leftmenu.css"  /}
+
+
 <div class="n_wz">
 
 
@@ -12,16 +14,16 @@
 </div>
    
     <div class="n_ct">
-      <include file="Public:left" />
+      {include file="public/left" /}
       <div class="n_ct_right">
         <div class="n_ct_right_tit"><div class="caption">标题：{$c_name}</div><div class="num">浏览次数：{$c_num}</div><div class="date">更新日期：{$c_date}</div></div>
        
          <div class="n_ct_right_new">
             <div class="n_ct_right_new_s">
-                <volist name="c_list" id="vo" empty="暂时没有数据">
+                {volist name="c_list" id="vo" empty="暂时没有数据"}
                         {$vo.content}
                       
-                    </volist>
+                    {/volist}
                 
             </div>
             
@@ -35,6 +37,4 @@
          </div>
       </div>
     </div>
-
-
-<include file="Public:footer" />  
+{include file="public/footer" /} 
