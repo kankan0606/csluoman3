@@ -156,37 +156,45 @@ public function index(){
 			$sqlstr   = 'select * from tb_csluoman_caption a  ';
             $sqlstr  .= 'where UNIX_TIMESTAMP(a.c_date) < ( ';
             $sqlstr  .= 'select UNIX_TIMESTAMP(b.c_date) from tb_csluoman_caption b where b.c_id='.$c_id.') ';
-            $sqlstr  .= 'order by c_date asc   limit 1';
+            $sqlstr  .= 'order by c_date desc   limit 1';
 			
             $pre_caption = \think\Db::query($sqlstr);
-			                       
-			$pre_caption=addKeyForCaption($pre_caption,null,'c_name');
 			
-			$item = $pre_caption[0];
-	
-			$pre_str='上一篇：<a href="/new/content/type/'.$item['c_type'].'/menuid/'.$menuid.'/c_id/'.$item['c_id'].'/" title="'.$item['c_name'].'">'.$item['c_name'].'</a>';
-			
-			if(empty($item['c_name'])){
-				 $pre_str='上一篇：没有了'; 
-		    }		   
+			if($pre_caption){
+			    
+			    $pre_caption=addKeyForCaption($pre_caption,null,'c_name');
+			    
+			    $item = $pre_caption[0];
+			    
+			    $pre_str='上一篇：<a href="/new/content/type/'.$item['c_type'].'/menuid/'.$menuid.'/c_id/'.$item['c_id'].'/" title="'.$item['c_name'].'">'.$item['c_name'].'</a>';
+			    
+			}else{
+			    
+			    $pre_str='上一篇：没有了';
+			    
+			}
 		   
 			//下一篇
 			$sqlstr   = 'select * from tb_csluoman_caption a  ';
             $sqlstr  .= 'where UNIX_TIMESTAMP(a.c_date) > ( ';
             $sqlstr  .= 'select UNIX_TIMESTAMP(b.c_date) from tb_csluoman_caption b where b.c_id='.$c_id.') ';
-            $sqlstr  .= 'order by c_date desc   limit 1';
+            $sqlstr  .= 'order by c_date asc   limit 1';
 		    
             $next_caption = \think\Db::query($sqlstr);
-		     
-			$next_caption=addKeyForCaption($next_caption,null,'c_name');
-			
-			$item = $next_caption[0];
-			
-			$nex_str='下一篇：<a href="/new/content/type/'.$item['c_type'].'/menuid/'.$menuid.'/c_id/'.$item['c_id'].'/" title="'.$item['c_name'].'">'.$item['c_name'].'</a>';
-			
-			  if(empty($item['c_name'])){
-				 $nex_str='下一篇：没有了'; 
-		      }		
+            
+            if($next_caption){
+                 
+                $next_caption=addKeyForCaption($next_caption,null,'c_name');
+                 
+                $item = $next_caption[0];
+                 
+                $nex_str='下一篇：<a href="/new/content/type/'.$item['c_type'].'/menuid/'.$menuid.'/c_id/'.$item['c_id'].'/" title="'.$item['c_name'].'">'.$item['c_name'].'</a>';
+                 
+            }else{
+                 
+                $nex_str='下一篇：没有了';
+                 
+            }	
 		    
 			$this->assign(array(
                             'title'  => $title,
@@ -204,7 +212,7 @@ public function index(){
 					  );
 		  
 		  
-		 $this->fetch(); // 输出模板
+		 return $this->fetch(); // 输出模板
 			
 			
 		}
